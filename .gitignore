@@ -1,0 +1,30 @@
+# Ignore environment files
+venv/
+*.env
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django migrations
+migrations/
+migrations/__pycache__/
+
+# Database
+db.sqlite3
+
+# Static files
+staticfiles/
+
+# Local development settings
+*.local
+
+# VSCode settings
+.vscode/
+
+# Django secret key
+*.secret
+
+# Ignore init.py (you can remove this if you want it tracked)
+__init__.py
