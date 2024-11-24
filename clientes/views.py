@@ -1,7 +1,6 @@
-from typing import Any
-from django.db.models.query import QuerySet
+from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
-from . import models
+from . import models, forms
 
 # Create your views here.
 
@@ -23,5 +22,6 @@ class ClientesListView(ListView):
 
 class ClientesCreateView(CreateView):
     model = models.Companies
-    template_name = 'clientes_list.html'
-    context_object_name = 'clientes'
+    template_name = 'clientes_create.html'
+    form_class = forms.ClientesFrom
+    success_url = reverse_lazy('clientes_list')
