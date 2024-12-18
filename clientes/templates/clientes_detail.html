@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h3 class="display-7">Detalhes do Cliente</h3>
+    <div class="card">
+        <div class="card-body"></div>
+         <h6>CNPJ: {{object.cnpj}}</h6>
+        <h4>{{object.corporate_reason}}</h4>
+        <h4>{{object.address}}</h4>
+        <h4>{{object.number}}</h4>
+        <h4>{{object.contact}}</h4>
+        <h4>{{object.phone}}</h4>
+        <h4>{{object.cell}}</h4>
+    </div>
+    <a href="{% url 'clientes_list' %}" class="btn btn-secondary mt-3" >Retornar para Lista de Clientes</a>
+</div>
+
+{% endblock %}

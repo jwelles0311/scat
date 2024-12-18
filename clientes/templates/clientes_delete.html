@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="conteiner mt-4">
+    <h3 class="display-7">Deletar Cliente</h3>
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text">Tem certeza que deseja excluir o cliente</p>
+            <form method="post" class="form">
+
+                {% csrf_token %}
+                <div class="card">
+                    <div class="card-body"></div>
+                     <h6>CNPJ: {{object.cnpj}}</h6>
+                    <h4>{{object.corporate_reason}}</h4>
+                    <h4>{{object.address}}</h4>
+                    <h4>{{object.number}}</h4>
+                    <h4>{{object.contact}}</h4>
+                    <h4>{{object.phone}}</h4>
+                    <h4>{{object.cell}}</h4>
+                </div>
+                
+                <button type="submit" class="btn btn-danger mt-3">Deletar</button>
+
+            </form>
+            <a href="{% url 'clientes_list' %}" class="btn btn-secondary mt-3" >Cancelar e retornar</a>
+        </div>
+
+    </div>
+    
+</div>
+
+{% endblock %}
