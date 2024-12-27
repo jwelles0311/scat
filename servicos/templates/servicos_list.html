@@ -10,7 +10,7 @@ SCAT - Cadastro de Tecnicos
 
 <div class="row mb-3">
     <div class="col md-6">
-        <form method="get" action="{% url 'tecnicos_list' %}">
+        <form method="get" action="{% url 'servicos_list' %}">
             <div class="input-group">
                 <input type="text" class="form-control"  name="name" placeholder="Tecnico" value="{{request.GET.name}}">
                 <button type="submit" class="btn btn-primary">
@@ -22,8 +22,8 @@ SCAT - Cadastro de Tecnicos
 
     </div>
     <div class="col-md-6">
-        <a href="{% url 'tecnicos_create' %}" class="btn btn-success float-end">
-            <i class="bi bi-plus"></i>Novo Tecnico
+        <a href="{% url 'servicos_create' %}" class="btn btn-success float-end">
+            <i class="bi bi-plus"></i>Novo Servico
         </a>
 
     </div>
@@ -40,20 +40,20 @@ SCAT - Cadastro de Tecnicos
             </tr>
 
            <tbody>
-            {% for tecnico in tecnicos %}
+            {% for servico in servicos %}
             <tr>
-                <td>{{tecnico.id}}</td>
-                <td>{{tecnico.name}}</td>
+                <td>{{servico.id}}</td>
+                <td>{{servico.service}}</td>
 
                 <td>
-                    <a href="{% url 'tecnicos_detail' tecnico.id %}" class="btn btn-info btn-sm">
+                    <a href="{% url 'servicos_detail' servico.id %}" class="btn btn-info btn-sm">
                         <i class="bi bi-eye"></i>
                     </a>
-                    <a href="{% url 'tecnicos_update' tecnico.id %}" class="btn btn-warning btn-sm">
+                    <a href="{% url 'servicos_update' servico.id %}" class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil"></i> 
                     </a>
 
-                    <a href="{% url 'tecnicos_delete' tecnico.id %}" class="btn btn-danger btn-sm">
+                    <a href="{% url 'servicos_delete' servico.id %}" class="btn btn-danger btn-sm">
                             <i class="bi bi-trash"></i>
                     </a>
                     

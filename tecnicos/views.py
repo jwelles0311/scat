@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from . import models, forms
 
 # Create your views here.
@@ -30,3 +30,16 @@ class TecnicosCreateView(CreateView):
 class TecnicosDetailView(DetailView):
     model = models.Technicians
     template_name = 'tecnicos_detail.html'
+
+
+class TecnicosUpdateView(UpdateView):
+    model = models.Technicians
+    template_name = 'tecnicos_update.html'
+    form_class = forms.TecnicosForm
+    success_url = reverse_lazy('tecnicos_list')
+
+
+class TecnicosDeleteView(DeleteView):
+    model = models.Technicians
+    template_name = 'tecnicos_delete.html'
+    success_url = reverse_lazy('tecnicos_list')

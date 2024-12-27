@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h3 class="display-7">Detalhes do Servoço</h3>
+    <div class="card">
+        <div class="card-body"></div>
+         <h6>Codigo: {{object.id}}</h6>
+        <h4>{{object.service}}</h4>
+        
+    </div>
+    <a href="{% url 'servicos_list' %}" class="btn btn-secondary mt-3" >Retornar para Lista de Serviços</a>
+</div>
+
+{% endblock %}
