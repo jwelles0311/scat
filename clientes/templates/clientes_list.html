@@ -23,7 +23,7 @@ SCAT - Cadastro de Clientes
     </div>
     <div class="col-md-6">
         <a href="{% url 'clientes_create' %}" class="btn btn-success float-end">
-            <i class="bi bi-plus"></i>Nova Marca
+            <i class="bi bi-plus"></i>Novo Cliente
         </a>
 
     </div>
@@ -35,8 +35,8 @@ SCAT - Cadastro de Clientes
             <tr>
                 <th>Cnpj</th>
                 <th>Cliente</th>
-                <th>Endereço</th>
-                <th>Número</th>
+                <th>Bairro</th>
+                <th>UF</th>
                 <th>Contato</th>
                 <th>Telefone</th>
                 <th>Celular</th>
@@ -48,8 +48,8 @@ SCAT - Cadastro de Clientes
             <tr>
                 <td>{{cliente.cnpj}}</td>
                 <td>{{cliente.corporate_reason}}</td>
-                <td>{{cliente.address}}</td>
-                <td>{{cliente.number}}</td>
+                <td>{{cliente.bairro}}</td>
+                <td>{{cliente.uf}}</td>
                 <td>{{cliente.contact}}</td>
                 <td>{{cliente.phone}}</td>
                 <td>{{cliente.cell}}</td>
@@ -74,5 +74,7 @@ SCAT - Cadastro de Clientes
     </table>
 
 </div>
+
+{% include 'components/_pagination.html' %}
 
 {% endblock %}

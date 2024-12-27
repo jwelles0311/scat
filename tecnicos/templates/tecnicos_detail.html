@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h3 class="display-7">Detalhes do Tecnico</h3>
+    <div class="card">
+        <div class="card-body"></div>
+         <h6>Codigo: {{object.id}}</h6>
+        <h4>{{object.name}}</h4>
+        
+    </div>
+    <a href="{% url 'tecnicos_list' %}" class="btn btn-secondary mt-3" >Retornar para Lista de Tecnicos</a>
+</div>
+
+{% endblock %}

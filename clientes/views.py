@@ -9,6 +9,7 @@ class ClientesListView(ListView):
     model = models.Companies
     template_name = 'clientes_list.html'
     context_object_name = 'clientes'
+    paginate_by = 5
 
     def get_queryset(self):
         queryset = super().get_queryset()

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+SCAT - Cadastro de Tecnicos
+
+{% endblock %}
+
+{% block content %}
+
+<div class="row mb-3">
+    <div class="col md-6">
+        <form method="get" action="{% url 'tecnicos_list' %}">
+            <div class="input-group">
+                <input type="text" class="form-control"  name="name" placeholder="Tecnico" value="{{request.GET.name}}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i>
+
+                </button>
+            </div>
+        </form>
+
+    </div>
+    <div class="col-md-6">
+        <a href="{% url 'tecnicos_create' %}" class="btn btn-success float-end">
+            <i class="bi bi-plus"></i>Novo Tecnico
+        </a>
+
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Codigo</th>
+                <th>Nome</th>
+                
+            </tr>
+
+           <tbody>
+            {% for tecnico in tecnicos %}
+            <tr>
+                <td>{{tecnico.id}}</td>
+                <td>{{tecnico.name}}</td>
+
+                <td>
+                    <a href="{% url 'tecnicos_detail' tecnico.id %}" class="btn btn-info btn-sm">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    
+                </td>
+                
+               
+            </tr>
+            {% endfor %}
+
+           </tbody>
+            
+        </thead>
+
+    </table>
+
+</div>
+
+{% include 'components/_pagination.html' %}
+
+{% endblock %}
