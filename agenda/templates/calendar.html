@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário de Agendamentos</title>
+    
+    
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+
+    
+    
+</head>
+<body>
+    <h1>Calendário de Agendamentos</h1>
+    <div id='calendar'></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarEl = document.getElementById('calendar');
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                editable: true,
+                selectable: true,
+                events: '/api/events/',
+                eventDrop: function(info) {
+                    fetch('/api/events/', {
+                        method: 'PUT',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            id: info.event.id,
+                            date_start: info.event.start.toISOString(),
+                            date_finish: info.event.end.toISOString(),
+                            technician: info.event.extendedProps.technic,
+                            customer: info.event.extendedProps.customer,
+                            service: info.event.extendedProps.servic
+                        })
+                    });
+                },
+                dateClick: function(info) {
+                    const title = prompt('Título do evento:');
+                    if (title) {
+                        fetch('/api/events/', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                title: title,
+                                date_start: info.dateStr,
+                                date_finish: info.dateStr
+                            })
+                        }).then(() => calendar.refetchEvents());
+                    }
+                },
+                eventClick: function(info) {
+                    if (confirm('Deseja excluir este evento?')) {
+                        fetch('/api/events/', {
+                            method: 'DELETE',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({ id: info.event.id })
+                        }).then(() => calendar.refetchEvents());
+                    }
+                }
+            });
+
+            calendar.render();
+        });
+    </script>
+</body>
+</html>

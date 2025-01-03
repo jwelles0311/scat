@@ -6,6 +6,16 @@
 from django.db import models
 from django.core.validators import RegexValidator, MaxValueValidator, MinValueValidator
 
+from django.core.exceptions import ValidationError
+
+
+def validate_cnpj(value):
+    # Lógica para validar o dígito verificador do CNPJ (adapte se necessário)
+    if not value.isdigit() or len(value) != 14:
+        raise ValidationError(
+            "O CNPJ deve conter exatamente 14 dígitos numéricos.")
+    # Adicione aqui a lógica de validação dos dígitos verificadores, se necessário.
+
 
 class Companies(models.Model):
     # Lista de estados brasileiros
@@ -42,6 +52,7 @@ class Companies(models.Model):
         max_length=14,
         primary_key=True,
         unique=True,
+        validators=[validate_cnpj],
         verbose_name="CNPJ"
 
     )
@@ -70,5 +81,5 @@ class Companies(models.Model):
         # Converte a primeira Letra para maiúscula
         self.address = self.address.title()
         self.bairro = self.address.title()
-        self.contact = self.address.title()
+        self.contact = self.contact.title()
         super().save(*args, **kwargs)

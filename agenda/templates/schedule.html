@@ -1,0 +1,42 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Agenda de Técnicos</h1>
+    <a href="{% url 'create_working_day' %}">Adicionar Agendamento</a>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Técnico</th>
+                <th>Cliente</th>
+                <th>Serviço</th>
+                <th>Data Inicial</th>
+                <th>Data Final</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for day in working_days %}
+            <tr>
+                <td>{{ day.technician }}</td>
+                <td>{{ day.customer }}</td>
+                <td>{{ day.service }}</td>
+                <td>{{ day.date_start|date:"d/m/Y" }}</td>
+                <td>{{ day.date_finish|date:"d/m/Y" }}</td>
+                
+                <td>
+                    {% if day.is_working %}
+                        Trabalhando
+                    {% else %}
+                        Livre
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+
+{% endblock %}
