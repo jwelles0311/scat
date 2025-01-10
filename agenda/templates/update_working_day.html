@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="display-7">{% if working_day %}Editar Agendamento{% else %}Criar Novo Agendamento{% endif %}</h3>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary mt-3">Salvar</button>
+                <a href="{% url 'workingdays_list' %}" class="btn btn-secondary mt-3">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <a href="{% url 'workingdays_list' %}">
+        <button class="btn btn-warning btn-sm">Voltar</button>
+    </a>
+</div>
+{% endblock %}

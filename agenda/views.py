@@ -1,74 +1,23 @@
-# from django.shortcuts import render, redirect
-from . import models
-
-from .forms import WorkingDaysForm
-
-from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.decorators.csrf import csrf_exempt
-
-# from .forms import SchedulingForm
-import json
-
-
-from django.views.generic.list import ListView
+from .forms import WorkingDaysForm, WorkingDaysDayForm
 from .models import WorkingDays
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.db.models import Q
+from clientes.models import Companies
+from tecnicos.models import Technicians
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import WorkingDaysSerializer
+
+# Create (já fornecido antes)
 
 
-from django.views.generic.list import ListView
-from .models import WorkingDays
-from django.db.models import Q
-
-
-class WorkingDaysListView(ListView):
-    model = WorkingDays
-    template_name = 'workingdays_list.html'
-    context_object_name = 'workingdays'
-    ordering = ['date_start']
-    paginate_by = 5
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-
-        # Obtém os parâmetros do GET
-        date_start = self.request.GET.get('date_start')
-        date_finish = self.request.GET.get('date_finish')
-        technician_id = self.request.GET.get('technician')
-
-        # Filtrar por período de datas
-        if date_start and date_finish:
-            queryset = queryset.filter(
-                Q(date_start__gte=date_start) & Q(date_finish__lte=date_finish)
-            )
-
-        # Filtrar por técnico
-        if technician_id:
-            queryset = queryset.filter(technician__id=technician_id)
-
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # Passa os técnicos para o template
-        context['technicians'] = self.model.objects.values(
-            'technician__id', 'technician__name').distinct()
-        return context
-
-
-def technician_schedule_view(request):
-    # Filtra os agendamentos e status dos dias
- #   schedules = Scheduling.objects.all()
-    working_days = WorkingDays.objects.all()
-
-    # Passa os dados para o template
-    context = {
-        #    'schedules': schedules,
-        'working_days': working_days,
-    }
-    return render(request, 'schedule.html', context)
-
-
+@login_required(login_url='/login/')
 def create_working_day(request):
     if request.method == 'POST':
         form = WorkingDaysForm(request.POST)
@@ -77,9 +26,79 @@ def create_working_day(request):
             return redirect('workingdays_list')
     else:
         form = WorkingDaysForm()
+
     return render(request, 'create_working_day.html', {'form': form})
 
 
+# Read (Listar todos os agendamentos)
+
+@login_required(login_url='/login/')
+def workingdays_list(request):
+    technicians = Technicians.objects.all()
+    customers = Companies.objects.all()
+
+    # Filtros
+    technician_id = request.GET.get('technician')
+    customer_id = request.GET.get('customer')
+    date_start = request.GET.get('date_start')
+    date_finish = request.GET.get('date_finish')
+    status = request.GET.get('status')
+
+    workingdays = WorkingDays.objects.all()
+
+    if technician_id:
+        workingdays = workingdays.filter(technician_id=technician_id)
+    if customer_id:
+        workingdays = workingdays.filter(customer_id=customer_id)
+    if date_start:
+        workingdays = workingdays.filter(date_start__gte=date_start)
+    if date_finish:
+        workingdays = workingdays.filter(date_finish__lte=date_finish)
+    if status:
+        workingdays = workingdays.filter(status=status)
+
+    return render(request, 'workingdays_list.html', {
+        'workingdays': workingdays,
+        'technicians': technicians,
+        'customers': customers,
+    })
+
+
+# Update (Atualizar um agendamento)
+
+@login_required(login_url='/login/')
+def update_working_day(request, pk):
+    working_day = get_object_or_404(WorkingDays, pk=pk)
+
+    if request.method == 'POST':
+        form = WorkingDaysDayForm(request.POST, instance=working_day)
+        if form.is_valid():
+            form.save()
+            return redirect('workingdays_list')
+    else:
+        form = WorkingDaysDayForm(instance=working_day)
+        print(f"Editing: date_start={working_day.date_start}, date_finish={
+              working_day.date_finish}")
+
+    return render(request, 'update_working_day.html', {
+        'form': form,
+        'working_day': working_day,
+    })
+
+# Delete (Excluir um agendamento)
+
+
+@login_required(login_url='/login/')
+def delete_working_day(request, pk):
+    working_day = get_object_or_404(WorkingDays, pk=pk)
+    if request.method == 'POST':
+        working_day.delete()
+        return redirect('workingdays_list')
+
+    return render(request, 'delete_working_day.html', {'working_day': working_day})
+
+
+@login_required(login_url='/login/')
 def home_view(request):
     return render(request, 'base.html')
 
@@ -88,61 +107,25 @@ def calendar_view(request):
     return render(request, 'calendar.html')
 
 
-@csrf_exempt
-def api_events(request):
-    if request.method == 'GET':
-        # Obtenha os parâmetros 'start' e 'end' da query string
-        start = request.GET.get('date_start')
-        end = request.GET.get('date_finish')
+# views.py
 
-        # Valide se os valores foram passados
-        if not start or not end:
-            return JsonResponse({'error': 'Os parâmetros "start" e "end" são obrigatórios.'}, status=400)
 
-        # Ajuste os valores para conter apenas a data no formato 'YYYY-MM-DD'
-        start_date = start.split('T')[0]
-        end_date = end.split('T')[0]
+class WorkingDaysCalendarView(LoginRequiredMixin, APIView):
+    def get(self, request, *args, **kwargs):
+        events = WorkingDays.objects.all()
+        serializer = WorkingDaysSerializer(events, many=True)
 
-        # Filtrar eventos dentro do intervalo fornecido
-        events = WorkingDays.objects.filter(
-            date_start__gte=start_date, date_finish__lte=end_date)
-        events_list = [
+        # Formatar os dados para o FullCalendar
+        formatted_events = [
             {
-                'id': event.id,
-                'title': event.observation,
-                'start': event.date_start.isoformat(),
-                'end': event.date_finish.isoformat(),
-                'technic': event.technic_id,
-                'customer': event.customer_id,
-                'servic': event.servic_id,
-                'color': '#007bff',
+                "id": event['id'],
+                "title": f"{event['technician_name']}",  # Nome do técnico
+                "start": event['date_start'],
+
+                # Adicionando a descrição do serviço
+                "description": event['service_service'],
+                "cliente": event['customer_corporate_reason'],
             }
-            for event in events
+            for event in serializer.data
         ]
-        return JsonResponse(events_list, safe=False)
-
-    elif request.method == 'POST':
-        data = json.loads(request.body)
-        event = WorkingDays.objects.create(
-            observation=data['title'],
-            date_start=data['date_start'],
-            date_finish=data['date_finish'],
-            technic_id=data['technician'],
-            customer_id=data['customer'],
-            servic_id=data['service']
-        )
-        return JsonResponse({'id': event.id}, status=201)
-
-    elif request.method == 'PUT':
-        data = json.loads(request.body)
-        event = WorkingDays.objects.get(id=data['id'])
-        event.date_start = data['date_start']
-        event.date_finish = data['date_finish']
-        event.save()
-        return JsonResponse({'success': True}, status=200)
-
-    elif request.method == 'DELETE':
-        data = json.loads(request.body)
-        event = WorkingDays.objects.get(id=data['id'])
-        event.delete()
-        return JsonResponse({'success': True}, status=200)
+        return Response(formatted_events)

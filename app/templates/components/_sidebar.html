@@ -10,28 +10,35 @@
             <li>            
                 <a href="{% url 'clientes_list' %}" class="nav-link px-0 align-middle">
                   <i class="bi bi-shop fs-4"></i>
-                  <span class="ms-1">Clientes</span>
+                  <span class="ms-1">Cadastro Clientes</span>
                 </a>
               </li>
             <li>
                 <a href="{% url 'tecnicos_list' %}" class="nav-link px-0 align-middle">
                   <i class="bi bi-person-workspace fs-4"></i>
-                  <span class="ms-1">Tecnicos</span>
+                  <span class="ms-1">Cadastro Tecnicos</span>
                 </a>
             </li>
             <li>
               <a href="{% url 'servicos_list' %}" class="nav-link px-0 align-middle">
                 <i class="bi bi-wrench fs-4"></i>
-                <span class="ms-1">Serviços</span>
+                <span class="ms-1">Cadastro Serviços</span>
               </a>
           </li>
-          <li>
-            <a href="{% url 'create_working_day' %}" class="nav-link px-0 align-middle">
-              <i class="bi bi-calendar3 fs-3"></i>
-              <span class="ms-1">Agendamento</span>
-            </a>
-        </li>
+          
 
+        <li>
+          <a href="{% url 'workingdays_list' %}" class="nav-link px-0 align-middle">
+            <i class="bi bi-list-check fs-3"></i>
+            <span class="ms-1">Lista Agendamentos</span>
+          </a>
+      </li>
+      <li>
+        <a href="{% url 'calendar' %}" class="nav-link px-0 align-middle">
+          <i class="bi bi-calendar-date fs-3"></i>
+          <span class="ms-1">Calendário</span>
+        </a>
+    </li>
           </ul>
         </div>
         <hr>

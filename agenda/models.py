@@ -1,41 +1,36 @@
 
-# models.py
 from django.db import models
 from clientes.models import Companies
 from tecnicos.models import Technicians
 from servicos.models import Services
 
 
-'''class Scheduling(models.Model):
-    observation = models.CharField(max_length=150)
-    customer = models.ForeignKey(Companies, on_delete=models.PROTECT)
-    technic = models.ForeignKey(Technicians, on_delete=models.PROTECT)
-    servic = models.ForeignKey(Services, on_delete=models.PROTECT)
-    date_start = models.DateField()
-    date_finish = models.DateField()
-
-    class Meta:
-        ordering = ['date_start']
-
-    def __str__(self):
-        return f"{self.customer} - {self.technic}"  # Ajuste no retorno
-'''
-
-
 class WorkingDays(models.Model):
+    STATUS_CHOICES = [
+        ('AGENDADO', 'Agendado'),
+        ('ANDAMENTO', 'Em andamento'),
+        ('CONCLUIDO', 'Concluído'),
+    ]
+
     technician = models.ForeignKey(Technicians, on_delete=models.CASCADE)
     customer = models.ForeignKey(Companies, on_delete=models.CASCADE)
     service = models.ForeignKey(Services, on_delete=models.CASCADE)
-#    date = models.DateField()
     date_start = models.DateField()
     date_finish = models.DateField()
-  #  True = Trabalhando, False = Livre,
-    is_working = models.BooleanField(default=False)
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='AGENDADO'
+    )
+    result_description = models.TextField(
+        blank=True,
+        null=True,
+
+    )
 
     class Meta:
         unique_together = ('technician', 'date_start')
         ordering = ['date_start']
 
     def __str__(self):
-        status = "Trabalhando" if self.is_working else "Livre"
-        return f"{self.technician} - {self.date_start}: {status}"
+        return f"{self.technician} - {self.date_start} - {self.get_status_display()}"

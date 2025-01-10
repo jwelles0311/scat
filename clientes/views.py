@@ -1,6 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from . import models, forms
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
@@ -21,7 +22,7 @@ class ClientesListView(ListView):
         return queryset
 
 
-class ClientesCreateView(CreateView):
+class ClientesCreateView(LoginRequiredMixin, CreateView):
     model = models.Companies
     template_name = 'clientes_create.html'
     form_class = forms.ClientesFrom

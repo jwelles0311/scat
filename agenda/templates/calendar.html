@@ -1,75 +1,82 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends 'base.html' %}
+
+{% block content %}
+
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendário de Agendamentos</title>
+    <link href="/static/css/style.css" rel="stylesheet">
+    <title>Calendário</title>
+    <!-- FullCalendar CSS -->
     
-    
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-
-    
-    
+   
 </head>
 <body>
-    <h1>Calendário de Agendamentos</h1>
-    <div id='calendar'></div>
+    <h2 style="text-align: center;">Calendário de Agendamentos</h2>
+    <div id="calendar" ></div>
+
+    <!-- FullCalendar JS -->
+    <script src="/static/js/index.global.min.js"></script>
+    <script src="/static/js/core/locales-all.global.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const calendarEl = document.getElementById('calendar');
-            const calendar = new FullCalendar.Calendar(calendarEl, {
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+    
+            var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
+                locale: 'pt-br', // Configurar idioma para português
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
                 },
-                editable: true,
-                selectable: true,
-                events: '/api/events/',
-                eventDrop: function(info) {
-                    fetch('/api/events/', {
-                        method: 'PUT',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({
-                            id: info.event.id,
-                            date_start: info.event.start.toISOString(),
-                            date_finish: info.event.end.toISOString(),
-                            technician: info.event.extendedProps.technic,
-                            customer: info.event.extendedProps.customer,
-                            service: info.event.extendedProps.servic
-                        })
-                    });
-                },
-                dateClick: function(info) {
-                    const title = prompt('Título do evento:');
-                    if (title) {
-                        fetch('/api/events/', {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({
-                                title: title,
-                                date_start: info.dateStr,
-                                date_finish: info.dateStr
-                            })
-                        }).then(() => calendar.refetchEvents());
-                    }
-                },
+                events: '/api/calendar/', // URL da API que retorna os eventos
                 eventClick: function(info) {
-                    if (confirm('Deseja excluir este evento?')) {
-                        fetch('/api/events/', {
-                            method: 'DELETE',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({ id: info.event.id })
-                        }).then(() => calendar.refetchEvents());
-                    }
+                    // Exibe informações adicionais ao clicar em um evento
+                    var eventObj = info.event;
+    
+                    // Exibir a descrição em um alert ou modal
+                    alert(
+                        'Técnico: ' + eventObj.title + '\n' +
+                        'Descrição: ' + eventObj.extendedProps.description + '\n' +
+                        'Cliente: ' + eventObj.extendedProps.cliente
+                    );
+                }
+            });
+    
+            calendar.render();
+        });
+    </script>
+   <!-- <script >
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            var calendarEl = document.getElementById('calendar');
+            
+
+            // Configuração do FullCalendar
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'pt-br', // Configurar idioma para português
+                
+                headerToolbar: {
+                    locale: 'pt-br',
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
+                },
+                events: '/api/calendar/', // URL da API que retorna os eventos
+                eventClick: function(info) {
+                    // Exibe informações adicionais ao clicar em um evento
+                    alert('Evento: ' + info.event.title);
                 }
             });
 
             calendar.render();
         });
     </script>
+-->
 </body>
-</html>
+
+{% endblock %}

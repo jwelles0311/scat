@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,12 +38,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
 
     'clientes',
     'tecnicos',
     'servicos',
     'agenda',
 ]
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'calendar'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -122,8 +127,10 @@ USE_TZ = True
 
 # STATIC_URL = 'static/'
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    BASE_DIR / "static",  # Certifique-se de que esse caminho esteja correto
+    os.path.join(BASE_DIR, 'static')
+    # BASE_DIR / "static",  # Certifique-se de que esse caminho esteja correto
 ]
 
 
