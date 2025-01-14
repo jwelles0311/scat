@@ -22,10 +22,11 @@ SCAT - Cadastro de Tecnicos
 
     </div>
     <div class="col-md-6">
+        {% if perms.tecnicos.add_technicians %}
         <a href="{% url 'tecnicos_create' %}" class="btn btn-success float-end">
             <i class="bi bi-plus"></i>Novo Tecnico
         </a>
-
+        {% endif %}
     </div>
 </div>
 
@@ -46,17 +47,22 @@ SCAT - Cadastro de Tecnicos
                 <td>{{tecnico.name}}</td>
 
                 <td>
+                    {% if perms.tecnicos.view_technicians %}
                     <a href="{% url 'tecnicos_detail' tecnico.id %}" class="btn btn-info btn-sm">
                         <i class="bi bi-eye"></i>
                     </a>
+                    {% endif %}
+
+                    {% if perms.tecnicos.change_technicians %}
                     <a href="{% url 'tecnicos_update' tecnico.id %}" class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil"></i> 
                     </a>
-
+                    {% endif %}
+                    {% if perms.tecnicos.delete_technicians %}
                     <a href="{% url 'tecnicos_delete' tecnico.id %}" class="btn btn-danger btn-sm">
                             <i class="bi bi-trash"></i>
                     </a>
-                    
+                    {% endif %}
                 </td>
                 
                

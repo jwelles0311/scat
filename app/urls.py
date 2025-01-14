@@ -26,6 +26,7 @@ from django.conf.urls.static import static
 urlpatterns = [
 
     path('', auth_views.LoginView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('', home_view, name='home'),
     path('admin/', admin.site.urls),
     path('', include('clientes.urls')),

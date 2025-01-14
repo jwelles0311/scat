@@ -22,10 +22,11 @@ SCAT - Cadastro de Tecnicos
 
     </div>
     <div class="col-md-6">
+        {% if perms.servicos.add_services %}
         <a href="{% url 'servicos_create' %}" class="btn btn-success float-end">
             <i class="bi bi-plus"></i>Novo Servico
         </a>
-
+        {% endif %}
     </div>
 </div>
 
@@ -46,17 +47,23 @@ SCAT - Cadastro de Tecnicos
                 <td>{{servico.service}}</td>
 
                 <td>
+                    {% if perms.servicos.view_services %}
                     <a href="{% url 'servicos_detail' servico.id %}" class="btn btn-info btn-sm">
                         <i class="bi bi-eye"></i>
                     </a>
+                    {% endif %}
+
+                    {% if perms.servicos.change_services %}
                     <a href="{% url 'servicos_update' servico.id %}" class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil"></i> 
                     </a>
+                    {% endif %}
 
+                    {% if perms.servicos.delete_services %}
                     <a href="{% url 'servicos_delete' servico.id %}" class="btn btn-danger btn-sm">
                             <i class="bi bi-trash"></i>
                     </a>
-                    
+                    {% endif %}
                 </td>
                 
                

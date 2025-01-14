@@ -22,10 +22,11 @@ SCAT - Cadastro de Clientes
 
     </div>
     <div class="col-md-6">
+        {% if perms.clientes.add_companies %}
         <a href="{% url 'clientes_create' %}" class="btn btn-success float-end">
             <i class="bi bi-plus"></i>Novo Cliente
         </a>
-
+        {% endif %}
     </div>
 </div>
 
@@ -54,15 +55,21 @@ SCAT - Cadastro de Clientes
                 <td>{{cliente.phone}}</td>
                 <td>{{cliente.cell}}</td>
                 <td>
+                    {% if perms.clientes.view_companies %}
                     <a href="{% url 'clientes_detail' cliente.cnpj %}" class="btn btn-info btn-sm">
                         <i class="bi bi-eye"></i>
                     </a>
+                    {% endif %}
+                    {% if perms.clientes.change_companies %}
                     <a href="{% url 'clientes_update' cliente.cnpj %}" class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil"></i>                        
                     </a>
+                    {% endif %}
+                    {% if perms.clientes.delete_companies %}
                     <a href="{% url 'clientes_delete' cliente.cnpj %}" class="btn btn-danger btn-sm">
                         <i class="bi bi-trash"></i>
                     </a>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}

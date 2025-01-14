@@ -7,24 +7,31 @@
         </button>
         <div class="collapse d-sm-block" id="menuCollapse">
           <ul class="nav flex-column align-items-start" id="menu">
+            {% if perms.clientes.view_companies %} 
             <li>            
                 <a href="{% url 'clientes_list' %}" class="nav-link px-0 align-middle">
                   <i class="bi bi-shop fs-4"></i>
                   <span class="ms-1">Cadastro Clientes</span>
                 </a>
               </li>
+              {% endif %}
+              {% if perms.tecnicos.view_technicians %}
             <li>
                 <a href="{% url 'tecnicos_list' %}" class="nav-link px-0 align-middle">
                   <i class="bi bi-person-workspace fs-4"></i>
                   <span class="ms-1">Cadastro Tecnicos</span>
                 </a>
             </li>
+            {% endif %}
+            {% if perms.servicos.view_services %}
             <li>
               <a href="{% url 'servicos_list' %}" class="nav-link px-0 align-middle">
                 <i class="bi bi-wrench fs-4"></i>
                 <span class="ms-1">Cadastro Serviços</span>
               </a>
           </li>
+          {% endif %}
+         
           
 
         <li>
@@ -38,6 +45,18 @@
           <i class="bi bi-calendar-date fs-3"></i>
           <span class="ms-1">Calendário</span>
         </a>
+    </li>
+    <li class="nav-item">
+      {% if user.is_authenticated %}
+      <form action="{% url 'logout' %}" method="post" id="logout-form" class="nav-link px-0 align-middle">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-link text-decoration-none text-reset nav-link px-0 align-middle">
+          <i class="bi bi-box-arrow-right fs-4 align-middle"></i>
+          <span class="ms-1 align-middle">Sair</span>
+        </button>
+      </form>
+      {% endif %}
+     
     </li>
           </ul>
         </div>

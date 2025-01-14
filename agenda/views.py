@@ -4,7 +4,7 @@ from .forms import WorkingDaysForm, WorkingDaysDayForm
 from .models import WorkingDays
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from django.db.models import Q
 from clientes.models import Companies
