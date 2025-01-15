@@ -11,4 +11,5 @@ urlpatterns = [
     path('delete/<int:pk>/', views.delete_working_day, name='delete_working_day'),
     path('calendar/', calendar_view, name='calendar'),
     path('api/calendar/', WorkingDaysCalendarView.as_view(), name='calendar-api'),
+    path('relatorio/tecnico/', views.technician_report, name='technician_report'),
 ]

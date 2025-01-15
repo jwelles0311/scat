@@ -6,13 +6,14 @@ from .models import WorkingDays
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
-from django.db.models import Q
+from django.db.models import Q, Count
 from clientes.models import Companies
 from tecnicos.models import Technicians
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import WorkingDaysSerializer
+
 
 # Create (já fornecido antes)
 
@@ -129,3 +130,25 @@ class WorkingDaysCalendarView(LoginRequiredMixin, APIView):
             for event in serializer.data
         ]
         return Response(formatted_events)
+
+
+def technician_report(request):
+    technicians = Technicians.objects.all()  # Carregar todos os técnicos
+
+    technician_id = request.GET.get('technician')
+    date_start = request.GET.get('date_start')
+    date_finish = request.GET.get('date_finish')
+
+    report = None
+    if technician_id and date_start and date_finish:
+        report = WorkingDays.objects.filter(
+            technician_id=technician_id,
+            date_start__gte=date_start,
+            date_finish__lte=date_finish,
+            status="CONCLUIDO"
+        ).annotate(total_services=Count('service'))
+
+    return render(request, 'reports/technician_report.html', {
+        'technicians': technicians,
+        'report': report
+    })
