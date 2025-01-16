@@ -66,8 +66,8 @@ class Companies(models.Model):
         default=UFChoices.SP  # Valor padrão: São Paulo
     )
     contact = models.CharField(max_length=30, verbose_name="Contato")
-    phone = models.CharField(max_length=10, verbose_name="Tel")
-    cell = models.CharField(max_length=11, blank=False, verbose_name="Cel")
+    phone = models.CharField(max_length=14, verbose_name="Tel")
+    cell = models.CharField(max_length=15, blank=False, verbose_name="Cel")
 
     class Meta:
         ordering = ['corporate_reason']

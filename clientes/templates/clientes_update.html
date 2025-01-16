@@ -7,7 +7,7 @@
         <div class="card-body">
             <form method="post" class="form">
                 {% csrf_token %}
-                {{ form.as_ul }}
+                {{ form.as_p }}
 
                 <button type="submit" class="btn btn-primary">Salvar Cliente</button>
 
@@ -17,6 +17,21 @@
     </div>
     <a href="{% url 'clientes_list' %}" class="btn btn-secondary mt-3" >Cancelar e retornar</a>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js"></script>
+<script>
+    // Formatação para telefone fixo
+    new Cleave('#id_phone', {
+        delimiters: ['(', ') ', '-'],
+        blocks: [0, 2, 4, 4],
+        numericOnly: true
+    });
 
+    // Formatação para celular
+    new Cleave('#id_cell', {
+        delimiters: ['(', ') ', '-'],
+        blocks: [0, 2, 5, 4],
+        numericOnly: true
+    });
+</script>
 
 {% endblock %}

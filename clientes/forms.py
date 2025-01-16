@@ -16,8 +16,18 @@ class ClientesFrom(forms.ModelForm):
             'bairro': forms.TextInput(attrs={"class": "form-control", "style": "width: 30%; height: 40px; margin-bottom: 10px;"}),
             #           'uf': forms.ChoiceWidget(attrs={"class": "form-control", "style": "width: 5%; height: 40px; margin-bottom: 10px;"}),
             'contact': forms.TextInput(attrs={"class": "form-control", "style": "width: 40%; height: 40px; margin-bottom: 10px;"}),
-            'phone': forms.TextInput(attrs={"class": "form-control", "style": "width: 40%; height: 40px; margin-bottom: 10px;"}),
-            'cell': forms.TextInput(attrs={"class": "form-control", "placeholder": "( )___._____",  "style": "width: 40%; height: 40px; margin-bottom: 10px;"}),
+            # 'phone': forms.TextInput(attrs={"class": "form-control", "style": "width: 40%; height: 40px; margin-bottom: 10px;"}),
+            # 'cell': forms.TextInput(attrs={"class": "form-control", "placeholder": "( )___._____",  "style": "width: 40%; height: 40px; margin-bottom: 10px;"}),
+            'phone': forms.TextInput(attrs={
+                "class": "form-control",
+                "id": "id_phone",
+                "style": "width: 40%; height: 40px; margin-bottom: 10px;"
+            }),
+            'cell': forms.TextInput(attrs={
+                "class": "form-control",
+                "id": "id_cell",
+                "style": "width: 40%; height: 40px; margin-bottom: 10px;"
+            }),
         }
         labels = {
             'cnpj': 'CNPJ',
